@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: fact_orders
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: primary_seller_id
+        data_tests:
+          - relationships:
+              to: ref('dim_sellers')
+              field: seller_id
+      - name: is_late
+        data_tests:
+          - accepted_values:
+              values: [0, 1]
+              quote: false
+  - name: dim_customers
+    columns:
+      - name: customer_id
+        data_tests:
+          - unique
+          - not_null
+  - name: dim_sellers
+    columns:
+      - name: seller_id
+        data_tests:
+          - unique
+          - not_null
+  - name: dim_products
+    columns:
+      - name: product_id
+        data_tests:
+          - unique
+          - not_null
+  - name: dim_geo_zip
+    columns:
+      - name: zip_code_prefix
+        data_tests:
+          - unique
+          - not_null
