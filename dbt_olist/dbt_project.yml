@@ -1,0 +1,9 @@
+name: 'dbt_olist'
+version: '1.0.0'
+profile: 'dbt_olist'
+model-paths: ["models"]
+
+models:
+  dbt_olist:
+    staging:
+      +materialized: view

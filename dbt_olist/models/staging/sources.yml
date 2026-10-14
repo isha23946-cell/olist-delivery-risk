@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: olist
+    schema: main
+    tables:
+      - name: raw_customers
+      - name: raw_geolocation
+      - name: raw_order_items
+      - name: raw_order_payments
+      - name: raw_order_reviews
+      - name: raw_orders
+      - name: raw_products
+      - name: raw_sellers
+      - name: raw_product_category_name_translation
