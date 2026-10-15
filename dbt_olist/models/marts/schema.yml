@@ -47,3 +47,15 @@ models:
         data_tests:
           - unique
           - not_null
+  - name: features_orders
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: is_late
+        data_tests:
+          - not_null
+          - accepted_values:
+              values: [0, 1]
+              quote: false
