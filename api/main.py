@@ -73,7 +73,7 @@ def high_risk(limit: int = Query(20, ge=1, le=100), state: Optional[str] = None)
 import json
 import joblib
 import pandas as pd
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ml.data import CAT_COLS, FEATURES, NUM_COLS, load_split
 
@@ -84,20 +84,20 @@ DEFAULTS = _train[NUM_COLS].median().to_dict()
 
 
 class OrderIn(BaseModel):
-    customer_state: str
-    seller_state: str
-    primary_category: str
-    estimated_days: float
-    distance_km: float
-    items_price: float
-    items_freight: float
+    customer_state: str = Field(pattern="^[A-Za-z]{2}$")
+    seller_state: str = Field(pattern="^[A-Za-z]{2}$")
+    primary_category: str = Field(min_length=1, max_length=60)
+    estimated_days: float = Field(gt=0, le=120)
+    distance_km: float = Field(ge=0, le=5000)
+    items_price: float = Field(gt=0, le=20000)
+    items_freight: float = Field(ge=0, le=5000)
     primary_payment_type: str = "credit_card"
-    total_weight_g: float = 1000
-    n_items: int = 1
-    max_installments: int = 1
-    purchase_month: int = 6
-    purchase_weekday: int = 2
-    seller_prev_late_rate: float = 0.05
+    total_weight_g: float = Field(1000, ge=0, le=100000)
+    n_items: int = Field(1, ge=1, le=50)
+    max_installments: int = Field(1, ge=1, le=24)
+    purchase_month: int = Field(6, ge=1, le=12)
+    purchase_weekday: int = Field(2, ge=0, le=6)
+    seller_prev_late_rate: float = Field(0.05, ge=0, le=1)
 
 
 GROUPS = {

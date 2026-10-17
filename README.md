@@ -34,3 +34,20 @@ SHAP values on a 200-order sample rank these as the strongest factors: the promi
 - Purchase month may reflect specific congested periods in a two-year window, not a general seasonal rule.
 - SHAP values come from a 200-order sample, so the top factors are reliable but the order of the smaller ones may shift.
 - About 0.5% of orders have no seller-to-customer distance because of missing coordinates; the model fills these in.
+
+## How to run it
+
+1. Create the environment: `python3.12 -m venv .venv`, then `source .venv/bin/activate`, then `pip install -r requirements.txt`.
+2. Download the Olist dataset from Kaggle (Brazilian E-Commerce Public Dataset by Olist) and unzip the CSV files into `data/raw`.
+3. Load the raw data: `python scripts/load_raw.py`.
+4. Build and test the dbt models: `cd dbt_olist`, then `dbt run`, then `dbt test`, then `cd ..`.
+5. Train the model and score all orders: `python ml/train_model.py`, then `python ml/score_orders.py`.
+6. Start the API: `uvicorn api.main:app --reload`, then open `http://127.0.0.1:8000/docs`.
+7. Run the tests: `python -m pytest`.
+
+### API endpoints
+
+- `GET /health`: health check.
+- `GET /kpis`: dashboard numbers (on-time rate, average review score, orders by state).
+- `GET /high-risk?limit=20&state=SP`: the riskiest flagged orders in the test period.
+- `POST /predict`: risk score and top reasons for a single order.
